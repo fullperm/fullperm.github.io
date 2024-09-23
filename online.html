@@ -29,7 +29,7 @@
                 const lastLine = lines[lines.length - 1].trim();
                 const parts = lastLine.split(' ');
                 const count = parts[1]; // The second part should be the number
-                document.getElementById('count').textContent = `People online: ${count}`;
+                document.getElementById('count').textContent = `Online: ${count}`;
             })
             .catch(error => {
                 document.getElementById('count').textContent = 'Error loading data';
