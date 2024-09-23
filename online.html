@@ -1,45 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inworld Users Display</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-  <div id="inworldUsers">Fetching inworld user count...</div>
+    <h1>People Online</h1>
+    <div id="onlineCount">Loading...</div>
 
-  <script>
-    function fetchInworldUsers() {
-      const url = 'https://www.bonniebots.com/homepage.txt';
-      fetch(url)
-        .then(response => response.text())
-        .then(data => {
-          const lines = data.split("\n");
-          let inworld = null;
+    <script>
+        async function fetchOnlineData() {
+            const response = await fetch('https://www.bonniebots.com/homepage.txt');
+            const text = await response.text();
+            const lines = text.trim().split('\n');
+            const lastLine = lines[lines.length - 1];
+            const parts = lastLine.split(' ');
+            const onlineCount = parts[parts.length - 1];
+            document.getElementById('onlineCount').textContent = onlineCount;
+        }
 
-          for (let i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith("inworld")) {
-              inworld = lines[i].split(" ")[1]; // Extract the inworld user count
-              break;
-            }
-          }
-
-          if (inworld) {
-            document.getElementById("inworldUsers").innerHTML = "Inworld Users: " + inworld;
-          } else {
-            document.getElementById("inworldUsers").innerHTML = "Error: Could not fetch inworld user count";
-          }
-        })
-        .catch(error => {
-          document.getElementById("inworldUsers").innerHTML = "Error: Unable to fetch data";
+        fetchOnlineData().catch(err => {
+            document.getElementById('onlineCount').textContent = 'Error fetching data';
+            console.error(err);
         });
-    }
-
-    // Fetch data when the page loads
-    fetchInworldUsers();
-
-    // Optionally, refresh every minute (60000 ms)
-    setInterval(fetchInworldUsers, 60000);
-  </script>
+    </script>
 </body>
 </html>
