@@ -3,36 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Users</title>
+    <title>Online Count</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #count {
+            font-size: 2em;
         }
     </style>
 </head>
 <body>
-    <h1>People Online</h1>
-    <div id="onlineCount">Loading...</div>
+    <div id="count">Loading...</div>
 
     <script>
-        async function fetchOnlineData() {
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const targetUrl = 'https://www.bonniebots.com/homepage.txt';
-            const response = await fetch(proxyUrl + targetUrl);
-            const text = await response.text();
-            const lines = text.trim().split('\n');
-            const lastLine = lines[lines.length - 1];
-            const parts = lastLine.split(' ');
-            const onlineCount = parts[parts.length - 1];
-            document.getElementById('onlineCount').textContent = onlineCount;
-        }
-
-        fetchOnlineData().catch(err => {
-            document.getElementById('onlineCount').textContent = 'Error fetching data';
-            console.error(err);
-        });
+        fetch('https://www.bonniebots.com/homepage.txt')
+            .then(response => response.text())
+            .then(data => {
+                const lines = data.split('\n');
+                const lastLine = lines[lines.length - 1].trim();
+                const parts = lastLine.split(' ');
+                const count = parts[1]; // The second part should be the number
+                document.getElementById('count').textContent = `People online: ${count}`;
+            })
+            .catch(error => {
+                document.getElementById('count').textContent = 'Error loading data';
+                console.error('Error fetching data:', error);
+            });
     </script>
 </body>
 </html>
