@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inworld Users Display</title>
+</head>
+<body>
+  <div id="inworldUsers">Fetching inworld user count...</div>
+
+  <script>
+    function fetchInworldUsers() {
+      const url = 'https://www.bonniebots.com/homepage.txt';
+      fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          const lines = data.split("\n");
+          let inworld = null;
+
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith("inworld")) {
+              inworld = lines[i].split(" ")[1]; // Extract the inworld user count
+              break;
+            }
+          }
+
+          if (inworld) {
+            document.getElementById("inworldUsers").innerHTML = "Inworld Users: " + inworld;
+          } else {
+            document.getElementById("inworldUsers").innerHTML = "Error: Could not fetch inworld user count";
+          }
+        })
+        .catch(error => {
+          document.getElementById("inworldUsers").innerHTML = "Error: Unable to fetch data";
+        });
+    }
+
+    // Fetch data when the page loads
+    fetchInworldUsers();
+
+    // Optionally, refresh every minute (60000 ms)
+    setInterval(fetchInworldUsers, 60000);
+  </script>
+</body>
+</html>
