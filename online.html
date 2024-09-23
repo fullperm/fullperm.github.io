@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Online Users</title>
-    <script>
-        fetch('https://www.bonniebots.com/homepage.xml')
-            .then(response => response.text())
-            .then(str => {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(str, "text/xml");
-                const peopleOnline = xmlDoc.getElementsByTagName('peopleOnline')[0].textContent;
-                document.getElementById('onlineCount').innerText = `People Online: ${peopleOnline}`;
-            });
-    </script>
-</head>
-<body>
-    <h1>People Online</h1>
-    <div id="onlineCount">Loading...</div>
-</body>
-</html>
+<script>
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = 'https://www.bonniebots.com/homepage.txt';
+
+    fetch(proxyUrl + targetUrl)
+        .then(response => response.text())
+        .then(data => {
+            const lines = data.split('\n');
+            const lastLine = lines[lines.length - 1].trim();
+            const parts = lastLine.split(' ');
+            const count = parts[1]; // The second part should be the number
+            document.getElementById('count').textContent = `People online: ${count}`;
+        })
+        .catch(error => {
+            document.getElementById('count').textContent = 'Error loading data';
+            console.error('Error fetching data:', error);
+        });
+</script>
