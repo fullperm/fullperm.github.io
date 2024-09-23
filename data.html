@@ -1,1 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display JSON Data</title>
+</head>
+<body>
+    <h1>JSON Data</h1>
+    <pre id="json-output"></pre>
+
+    <script>
+        fetch('data.json') // Update this path if needed
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+                document.body.insertAdjacentHTML('beforeend', `<h2>${data.message}</h2>`);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    </script>
+</body>
+</html>
 
